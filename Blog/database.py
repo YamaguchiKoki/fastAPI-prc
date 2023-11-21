@@ -13,18 +13,18 @@ db_name = 'samplefastAPI'
 # engineの設定
 engine = create_engine(f'mysql+mysqlconnector://{user}:{password}@{host}/{db_name}')
 
-# セッションの作成
-# db_session = scoped_session(
-#   sessionmaker(
-#     autocommit=False,
-#     autoflush=False,
-#     bind=engine
-#   )
-# )
+
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 # テーブルを作成する
 Base = declarative_base()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 # Base.query  = db_session.query_property()
 # # テーブルを定義する
 # # Baseを継承
